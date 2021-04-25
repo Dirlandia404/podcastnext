@@ -5,8 +5,9 @@ import {format, parseISO} from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import { api } from '../services/api';
 import { convertDurationToTimeString } from '../utils/convertDurationToTime';
-
+import {PlayerContext} from '../contexts/PlayerContext'
 import styles from './home.module.scss';
+import { useContext } from 'react';
 
 type Episode = {
   id: string;
@@ -23,10 +24,11 @@ type HomeProps = {
   allEpisodes: Episode[];
 }
 export default function Home({latesEpisodes, allEpisodes}:HomeProps) {
+  const {play} = useContext(PlayerContext)
   return (
     <div className={styles.homepage}>
       <section className={styles.latesEpisodes}>
-        <h2>Últimos lançamentos</h2>
+        <h2>Últimos lançamentos </h2>
         <ul> 
           {latesEpisodes.map(episode =>{
             return(
@@ -48,7 +50,7 @@ export default function Home({latesEpisodes, allEpisodes}:HomeProps) {
                   <span>{episode.durationAsString}</span>
                 </div>
 
-                <button type = "button">
+                <button type = "button"  onClick={() => play(episode)}>
                   <img src="/play-green.svg" alt="tocar episodio"/>
                 </button>
               </li>
@@ -93,7 +95,7 @@ export default function Home({latesEpisodes, allEpisodes}:HomeProps) {
                     <td style={{width:100}}>{episode.publishesAt}</td>
                     <td>{episode.durationAsString}</td>
                     <td>
-                      <button type="button">
+                      <button type="button" onClick={() => play(episode)}>
                         <img src="/play-green.svg" alt="Tocar episodio"/>
                       </button>
                     </td>
